@@ -1,21 +1,28 @@
-import { supabase } from './supabase.service';
+import { Injectable } from '@angular/core';
+import { SupabaseService } from './supabase.service';
 
-export async function login(email: string, password: string) {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  });
+@Injectable({ providedIn: 'root' })
+export class AuthService {
 
-  if (error) throw error;
+  constructor(private supabaseService: SupabaseService) {}
 
-  return data;
-}
+  async login(email: string, password: string) {
+    const { data, error } = await this.supabaseService.login(email, password);
+    if (error) throw error;
+    return data;
+  }
 
-export async function getUser() {
-  const { data } = await supabase.auth.getUser();
-  return data.user;
-}
+  async getUser() {
+    const { data } = await this.supabaseService.getSession();
+    return data.session?.user ?? null;
+  }
 
-export async function logout() {
-  await supabase.auth.signOut();
+  async logout() {
+    await this.supabaseService.logout();
+  }
+
+  async isLoggedIn(): Promise<boolean> {
+    const { data } = await this.supabaseService.getSession();
+    return !!data.session;
+  }
 }

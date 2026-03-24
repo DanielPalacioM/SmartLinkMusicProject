@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SupabaseService } from 'src/app/services/supabase.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,11 +10,9 @@ import { Component, OnInit } from '@angular/core';
 export class DashboardComponent implements OnInit {
 
   seccion: string = '';
-
   artist: string = '';
   song: string = '';
   previewImage: any = '';
-
   linkGenerado: string = '';
 
   urls = {
@@ -23,21 +22,14 @@ export class DashboardComponent implements OnInit {
     facebook: ''
   };
 
+  constructor(private supabaseService: SupabaseService) {}
+
   mostrarSeccion(sec: string) {
     this.seccion = sec;
   }
 
-  generarSlug(nombre: string): string {
-    return nombre
-      .toLowerCase()
-      .trim()
-      .replace(/ /g, '-')
-      .replace(/[^\w-]+/g, '');
-  }
-
   onFileSelected(event: any) {
     const file = event.target.files[0];
-
     if (file) {
       const reader = new FileReader();
       reader.onload = e => {
@@ -47,29 +39,36 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  guardar() {
-  const slug = this.artist
-    .toLowerCase()
-    .trim()
-    .replace(/ /g, '-')
-    .replace(/[^\w-]+/g, '');
+  async guardar() {
+    const slug = this.artist
+      .toLowerCase()
+      .trim()
+      .replace(/ /g, '-')
+      .replace(/[^\w-]+/g, '');
 
-  const data = {
-    artist: this.artist,
-    song: this.song,
-    cover: this.previewImage,
-    urls: this.urls,
-    slug: slug
-  };
+    const data = {
+      artist: this.artist,
+      song: this.song,
+      cover: this.previewImage,
+      urls: this.urls,
+      slug: slug
+    };
 
-  localStorage.setItem('smartlink_data', JSON.stringify(data));
+    // Guarda en Supabase
+    const { error } = await this.supabaseService.guardarSmartlink(data);
 
-  // Codifica los datos en la URL como base64
-  const encoded = btoa(encodeURIComponent(JSON.stringify(data)));
-  this.linkGenerado = window.location.origin + '/' + slug + '?d=' + encoded;
+    if (error) {
+      alert('Error al guardar: ' + error.message);
+      return;
+    }
 
-  alert('Guardado correctamente');
-}
+    // Guarda también en localStorage como caché
+    localStorage.setItem('smartlink_data', JSON.stringify(data));
+
+    this.linkGenerado = window.location.origin + '/' + slug;
+
+    alert('Guardado correctamente');
+  }
 
   abrirSmartlink() {
     if (this.linkGenerado) {
@@ -77,17 +76,16 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    const data = localStorage.getItem('smartlink_data');
-    if (data) {
-      const parsed = JSON.parse(data);
+  async ngOnInit() {
+    // Intenta cargar desde localStorage primero (más rápido)
+    const cached = localStorage.getItem('smartlink_data');
+    if (cached) {
+      const parsed = JSON.parse(cached);
       this.artist = parsed.artist;
       this.song = parsed.song;
       this.previewImage = parsed.cover;
       this.urls = parsed.urls;
-
       this.linkGenerado = window.location.origin + '/' + parsed.slug;
     }
   }
-
 }

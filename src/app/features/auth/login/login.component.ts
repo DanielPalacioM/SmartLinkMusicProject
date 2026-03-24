@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-
-// 👇 IMPORTA TU SERVICIO
-import { login } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -14,20 +12,20 @@ export class LoginComponent {
 
   email: string = '';
   password: string = '';
-
   loading: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   async login() {
     try {
       this.loading = true;
 
-      // 🔐 LOGIN REAL CON SUPABASE
-      await login(this.email, this.password);
+      await this.authService.login(this.email, this.password);
 
       alert('Login exitoso 🔥');
-
       this.router.navigate(['/admin']);
 
     } catch (error: any) {

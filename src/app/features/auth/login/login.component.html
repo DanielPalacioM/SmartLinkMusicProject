@@ -1,0 +1,26 @@
+<div class="login-container">
+  <div class="login-card">
+
+    <h2 class="title">Panel de administración</h2>
+    <p class="subtitle">
+      Ingresar para cambiar las portadas de las canciones y las URL
+    </p>
+
+    <form (ngSubmit)="login()">
+
+      <div class="input-group">
+        <input type="text" [(ngModel)]="username" name="username" required>
+        <label>Usuario</label>
+      </div>
+
+      <div class="input-group">
+        <input type="password" [(ngModel)]="password" name="password" required>
+        <label>Contraseña</label>
+      </div>
+
+      <button class="login-btn" type="submit">Ingresar</button>
+
+    </form>
+
+  </div>
+</div>

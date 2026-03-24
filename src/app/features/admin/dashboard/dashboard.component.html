@@ -1,0 +1,65 @@
+<div class="admin-container">
+  <div class="admin-card">
+
+    <h2 class="title">Panel de Administración</h2>
+
+    <div class="buttons">
+      <button (click)="mostrarUrls()">Cambiar URLs</button>
+      <button (click)="mostrarPortada()">Cambiar Portada</button>
+    </div>
+
+    <!-- SECCION URLS -->
+    <div *ngIf="seccion === 'urls'" class="section">
+      <h3>Editar URLs</h3>
+
+      <div class="input-group">
+        <label>Spotify</label>
+        <input type="text" [(ngModel)]="urls.spotify">
+      </div>
+
+      <div class="input-group">
+        <label>YouTube</label>
+        <input type="text" [(ngModel)]="urls.youtube">
+      </div>
+
+      <div class="input-group">
+        <label>YouTube Music</label>
+        <input type="text" [(ngModel)]="urls.youtubemusic">
+      </div>
+
+      <div class="input-group">
+        <label>Facebook</label>
+        <input type="text" [(ngModel)]="urls.facebook">
+      </div>
+    </div>
+
+    <!-- SECCION PORTADA -->
+    <div *ngIf="seccion === 'portada'" class="section">
+      <h3>Cambiar Portada</h3>
+
+      <input type="file" (change)="onFileSelected($event)">
+
+      <div class="preview-img" *ngIf="imagenPreview">
+        <img [src]="imagenPreview" alt="preview">
+      </div>
+    </div>
+
+    <button class="save-btn" (click)="guardar()">Guardar Cambios</button>
+
+  </div>
+
+  <!-- PREVIEW SMARTLINK -->
+  <div class="preview-card">
+    <h3>Vista Previa</h3>
+
+    <div class="smartlink-preview">
+      <img [src]="imagenPreview || 'https://via.placeholder.com/300x200'" class="cover">
+
+      <a [href]="urls.spotify" target="_blank" class="link spotify">Spotify</a>
+      <a [href]="urls.youtube" target="_blank" class="link youtube">YouTube</a>
+      <a [href]="urls.youtubemusic" target="_blank" class="link ytmusic">YouTube Music</a>
+      <a [href]="urls.facebook" target="_blank" class="link facebook">Facebook</a>
+    </div>
+  </div>
+
+</div>

@@ -125,10 +125,28 @@
 /* MOBILE */
 @media (max-width: 768px) {
   .smartlink-container {
-    height: auto;           /* permite crecer */
+    height: auto;
     min-height: 100vh;
     align-items: flex-start;
-    overflow-y: auto;       /* habilita scroll */
+    overflow-y: auto;
+    background: #0b2716;      /* ← fondo verde oscuro */
+  }
+
+  .bg-blur {
+    height: 60%;              /* ← más alto en mobile */
+    filter: blur(40px);       /* ← menos blur, más visible */
+    transform: scale(1.4);
+    opacity: 0.85;
+  }
+
+  .smartlink-container::after {
+    background: linear-gradient(
+      to bottom,
+      rgba(11, 39, 22, 0.3) 0%,
+      rgba(40, 141, 79, 0.4) 30%,
+      rgba(11, 39, 22, 0.85) 65%,
+      rgba(11, 39, 22, 1) 100%
+    );
   }
 
   .content {
@@ -152,6 +170,6 @@
   }
 
   .btn {
-    max-width: 100%;     /* botones full width en mobile */
+    max-width: 100%;
   }
 }

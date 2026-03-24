@@ -100,26 +100,25 @@
   overflow-y: auto;
   overflow-x: hidden;
   box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-  background: #000;
-  display: flex;              /* ← agrega */
-  flex-direction: column;     /* ← agrega */
+  background: #0b2716;   /* ← negro → verde oscuro */
+  display: flex;
+  flex-direction: column;
 }
 
-/* FONDO BLUR SOLO MITAD */
 .bg-blur {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 55%;
+  height: 65%;           /* ← más alto */
   background-size: cover;
   background-position: center;
-  filter: blur(60px);
-  transform: scale(1.2);
+  filter: blur(40px);    /* ← menos blur para que se vea más la imagen */
+  transform: scale(1.4); /* ← más grande para que cubra bien */
   z-index: 0;
+  opacity: 0.85;         /* ← agrega esto, más visible */
 }
 
-/* CAPA OSCURA */
 .preview-smartlink::after {
   content: "";
   position: absolute;
@@ -127,12 +126,13 @@
   height: 100%;
   background: linear-gradient(
     to bottom,
-    rgba(0,0,0,0.8) 0%,
-    rgba(0,0,0,0.85) 40%,
-    rgba(0,0,0,0.95) 70%,
-    rgba(0,0,0,1) 100%
+    rgba(11, 39, 22, 0.3) 0%,      /* ← más transparente arriba */
+    rgba(40, 141, 79, 0.4) 30%,
+    rgba(11, 39, 22, 0.85) 65%,
+    rgba(11, 39, 22, 1) 100%
   );
   z-index: 1;
+  pointer-events: none;
 }
 
 .smartlink-content {

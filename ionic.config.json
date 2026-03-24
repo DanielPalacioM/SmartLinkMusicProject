@@ -1,0 +1,7 @@
+{
+  "name": "SmartMusicLink",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,272 @@
+.admin-container {
+  min-height: 100vh;
+  padding: 40px;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  overflow-y: auto;
+
+  background: linear-gradient(
+    135deg,
+    #0b2716 0%,
+    #0e3b20 25%,
+    #176c3a 50%,
+    #1f8f4a 75%,
+    #0b2716 100%
+  );
+}
+
+/* PANEL ADMIN */
+.admin-card {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  padding: 25px;
+  border-radius: 20px;
+  color: white;
+  box-shadow: 0 0 25px rgba(29,185,84,0.2);
+}
+
+/* BOTONES */
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.buttons button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: white;
+  color: #1DB954;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.25s;
+}
+
+.buttons button:hover {
+  background: #1DB954;
+  color: white;
+  transform: translateY(-3px);
+}
+
+/* INPUTS */
+.section label {
+  color: white;
+  font-size: 13px;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.section input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #ffffff;
+  color: #000000; /* TEXTO NEGRO */
+  font-weight: 500;
+}
+
+/* BOTON GUARDAR */
+.save-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: #1DB954;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.save-btn:hover {
+  background: #18a74a;
+  transform: translateY(-2px);
+}
+
+.preview-smartlink {
+  position: relative;
+  width: 320px;
+  height: 600px;
+  border-radius: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  background: #000;
+  display: flex;              /* ← agrega */
+  flex-direction: column;     /* ← agrega */
+}
+
+/* FONDO BLUR SOLO MITAD */
+.bg-blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 55%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(60px);
+  transform: scale(1.2);
+  z-index: 0;
+}
+
+/* CAPA OSCURA */
+.preview-smartlink::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.8) 0%,
+    rgba(0,0,0,0.85) 40%,
+    rgba(0,0,0,0.95) 70%,
+    rgba(0,0,0,1) 100%
+  );
+  z-index: 1;
+}
+
+.smartlink-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 20px;
+  flex: 1;                    /* ← ocupa todo el espacio disponible */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;/* contenido arriba, sin hueco abajo */
+}
+
+/* BLOQUEAR CLICKS EN PREVIEW */
+.preview-smartlink .btn {
+  pointer-events: none;
+}
+
+/* PORTADA */
+.cover {
+  width: 100%;
+  border-radius: 18px;
+  margin-bottom: 15px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+}
+
+/* TITULOS */
+.title {
+  color: white;
+  font-size: 19px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.subtitle {
+  color: rgba(255,255,255,0.85);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* BOTONES */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  background: white;
+  color: black;
+  font-weight: bold;
+  transition: all 0.25s ease;
+}
+
+/* ICONOS */
+.icon {
+  width: 22px;
+  height: 22px;
+  transition: 0.25s;
+}
+
+/* HOVER BOTONES */
+.spotify:hover {
+  background: #1DB954;
+  color: white;
+  transform: scale(1.04);
+}
+
+.youtube:hover {
+  background: #FF0000;
+  color: white;
+  transform: scale(1.04);
+}
+
+.facebook:hover {
+  background: #1877F2;
+  color: white;
+  transform: scale(1.04);
+}
+
+.ytmusic:hover {
+  background: #4D4D4D;
+  color: white;
+  transform: scale(1.04);
+}
+
+/* ICONOS SE VUELVEN BLANCOS */
+.spotify:hover img,
+.youtube:hover img,
+.facebook:hover img {
+  filter: brightness(0) invert(1);
+}
+
+/* CLICK */
+.btn:active {
+  transform: scale(0.96);
+  filter: brightness(0.9);
+}
+
+/* TERMINOS */
+.terms {
+  font-size: 10px;
+  color: rgba(255,255,255,0.65);
+  margin-top: 20px;
+  line-height: 1.4;
+}
+
+.link-box {
+  width: 320px;
+  margin-top: 10px;
+}
+
+.link-box p {
+  color: white;
+  font-size: 13px;
+}
+
+.link-box input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  margin-bottom: 10px;
+}
+
+.open-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: #1877F2;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}

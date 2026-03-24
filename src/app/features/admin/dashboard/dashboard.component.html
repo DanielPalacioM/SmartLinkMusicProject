@@ -1,65 +1,98 @@
 <div class="admin-container">
+
+  <!-- PANEL ADMIN -->
   <div class="admin-card">
+    <h2>Panel Administrador</h2>
 
-    <h2 class="title">Panel de Administración</h2>
-
+    <!-- BOTONES -->
     <div class="buttons">
-      <button (click)="mostrarUrls()">Cambiar URLs</button>
-      <button (click)="mostrarPortada()">Cambiar Portada</button>
+      <button (click)="mostrarSeccion('info')">Info Canción</button>
+      <button (click)="mostrarSeccion('urls')">Cambiar URLs</button>
+      <button (click)="mostrarSeccion('portada')">Cambiar Portada</button>
     </div>
 
-    <!-- SECCION URLS -->
+    <!-- INFO CANCION -->
+    <div *ngIf="seccion === 'info'" class="section">
+      <label>Nombre del Artista</label>
+      <input type="text" [(ngModel)]="artist">
+
+      <label>Nombre de la Canción</label>
+      <input type="text" [(ngModel)]="song">
+
+      <button class="save-btn" (click)="guardar()">Guardar Información</button>
+    </div>
+
+    <!-- URLS -->
     <div *ngIf="seccion === 'urls'" class="section">
-      <h3>Editar URLs</h3>
+      <label>Spotify</label>
+      <input type="text" [(ngModel)]="urls.spotify">
 
-      <div class="input-group">
-        <label>Spotify</label>
-        <input type="text" [(ngModel)]="urls.spotify">
-      </div>
+      <label>YouTube</label>
+      <input type="text" [(ngModel)]="urls.youtube">
 
-      <div class="input-group">
-        <label>YouTube</label>
-        <input type="text" [(ngModel)]="urls.youtube">
-      </div>
+      <label>YouTube Music</label>
+      <input type="text" [(ngModel)]="urls.youtubemusic">
 
-      <div class="input-group">
-        <label>YouTube Music</label>
-        <input type="text" [(ngModel)]="urls.youtubemusic">
-      </div>
+      <label>Facebook</label>
+      <input type="text" [(ngModel)]="urls.facebook">
 
-      <div class="input-group">
-        <label>Facebook</label>
-        <input type="text" [(ngModel)]="urls.facebook">
-      </div>
+      <button class="save-btn" (click)="guardar()">Guardar URLs</button>
     </div>
 
-    <!-- SECCION PORTADA -->
+    <!-- PORTADA -->
     <div *ngIf="seccion === 'portada'" class="section">
-      <h3>Cambiar Portada</h3>
-
       <input type="file" (change)="onFileSelected($event)">
+      <button class="save-btn" (click)="guardar()">Guardar Portada</button>
+    </div>
 
-      <div class="preview-img" *ngIf="imagenPreview">
-        <img [src]="imagenPreview" alt="preview">
+  </div>
+
+  <!-- PREVIEW SMARTLINK REAL -->
+  <div class="preview-smartlink">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FONDO BLUR -->
+    <div class="bg-blur" [style.background-image]="'url(' + previewImage + ')'"></div>
+
+    <div class="smartlink-content">
+
+      <img [src]="previewImage || 'assets/default-cover.jpg'" class="cover">
+
+      <h2 class="title">{{ artist || 'Nombre Artista' }} - {{ song || 'Nombre Canción' }}</h2>
+      <p class="subtitle">Elige tu servicio de preferencia</p>
+
+      <!-- BOTONES PREVIEW (NO CLICKEABLES) -->
+      <div class="btn spotify">
+        <img src="assets/spotify.png" class="icon"> Spotify
       </div>
+
+      <div class="btn youtube">
+        <img src="assets/youtubeRed.png" class="icon"> YouTube
+      </div>
+
+      <div class="btn facebook">
+        <img src="assets/facebookBlue.png" class="icon"> Facebook
+      </div>
+
+      <div class="btn ytmusic">
+        <img src="assets/ytmusic.png" class="icon"> YouTube Music
+      </div>
+
+      <p class="terms">
+        Esta plataforma funciona como un Smart Link que redirige a servicios externos de música.
+        No alojamos contenido musical. Todas las marcas y logotipos pertenecen a sus respectivos propietarios.
+      </p>
+
     </div>
-
-    <button class="save-btn" (click)="guardar()">Guardar Cambios</button>
-
   </div>
 
-  <!-- PREVIEW SMARTLINK -->
-  <div class="preview-card">
-    <h3>Vista Previa</h3>
+  <div *ngIf="linkGenerado" class="link-box">
+  <p>Tu Smartlink:</p>
+  <input [value]="linkGenerado" readonly>
+  <button class="open-btn" (click)="abrirSmartlink()">Abrir Smartlink</button>
+</div>
 
-    <div class="smartlink-preview">
-      <img [src]="imagenPreview || 'https://via.placeholder.com/300x200'" class="cover">
 
-      <a [href]="urls.spotify" target="_blank" class="link spotify">Spotify</a>
-      <a [href]="urls.youtube" target="_blank" class="link youtube">YouTube</a>
-      <a [href]="urls.youtubemusic" target="_blank" class="link ytmusic">YouTube Music</a>
-      <a [href]="urls.facebook" target="_blank" class="link facebook">Facebook</a>
-    </div>
-  </div>
 
 </div>

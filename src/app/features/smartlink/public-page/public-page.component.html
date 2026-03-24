@@ -1,3 +1,40 @@
-<p>
-  public-page works!
-</p>
+<div class="smartlink-container">
+
+  <div class="bg-blur" [style.background-image]="'url(' + cover + ')'"></div>
+
+  <div class="content">
+
+    <div class="top-section">
+      <img [src]="cover || 'assets/default-cover.jpg'" class="cover">
+
+      <div class="info">
+        <h2 class="title">{{ artist }} - {{ song }}</h2>
+        <p class="subtitle">Elige tu servicio de preferencia</p>
+
+        <div class="buttons">
+          <div class="btn spotify" (click)="abrir(urls.spotify)">
+            <img src="assets/spotify.png" class="icon"> Spotify
+          </div>
+
+          <div class="btn youtube" (click)="abrir(urls.youtube)">
+            <img src="assets/youtubeRed.png" class="icon"> YouTube
+          </div>
+
+          <div class="btn facebook" (click)="abrir(urls.facebook)">
+            <img src="assets/facebookBlue.png" class="icon"> Facebook
+          </div>
+
+          <div class="btn ytmusic" (click)="abrir(urls.youtubemusic)">
+            <img src="assets/ytmusic.png" class="icon"> YouTube Music
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="terms">
+      Esta plataforma funciona como un Smart Link que redirige a servicios externos de música.
+      No alojamos contenido musical.
+    </p>
+
+  </div>
+</div>

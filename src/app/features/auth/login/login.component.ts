@@ -1,26 +1,40 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
+// 👇 IMPORTA TU SERVICIO
+import { login } from 'src/app/services/auth.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   standalone: false,
-
 })
 export class LoginComponent {
 
-  username: string = '';
+  email: string = '';
   password: string = '';
+
+  loading: boolean = false;
 
   constructor(private router: Router) {}
 
-  login() {
-    if (this.username === 'admin' && this.password === '1234') {
+  async login() {
+    try {
+      this.loading = true;
+
+      // 🔐 LOGIN REAL CON SUPABASE
+      await login(this.email, this.password);
+
+      alert('Login exitoso 🔥');
+
       this.router.navigate(['/admin']);
-    } else {
-      alert('Usuario o contraseña incorrectos');
+
+    } catch (error: any) {
+      console.error(error);
+      alert('Error: ' + error.message);
+    } finally {
+      this.loading = false;
     }
   }
-
 }

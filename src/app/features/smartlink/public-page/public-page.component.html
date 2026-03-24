@@ -1,4 +1,24 @@
-<div class="smartlink-container">
+<div *ngIf="noData" style="color:white; text-align:center; padding:40px; font-size:18px;">
+  Smartlink no encontrado.
+</div>
+
+<div class="smartlink-container" *ngIf="!noData">
+
+  <button class="hamburger" [class.active]="sidebarOpen" (click)="sidebarOpen = !sidebarOpen">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" [class.open]="sidebarOpen">
+    <div class="sidebar-content">
+      <button class="login-btn" routerLink="/login" (click)="sidebarOpen = false">
+        <span>👤</span>
+        Iniciar Sesión
+      </button>
+    </div>
+  </div>
 
   <div class="bg-blur" [style.background-image]="'url(' + cover + ')'"></div>
 

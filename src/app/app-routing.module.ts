@@ -5,7 +5,7 @@ const routes: Routes = [
   { path: 'login', loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule) },
   { path: 'admin', loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule) },
   { path: ':artist', loadChildren: () => import('./features/smartlink/smartlink.module').then(m => m.SmartlinkModule) },
-  { path: '', redirectTo: 'login', pathMatch: 'full' }
+  { path: '', redirectTo: 'artist', pathMatch: 'full' }
 ];
 
 @NgModule({

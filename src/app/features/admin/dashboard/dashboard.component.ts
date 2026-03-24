@@ -64,7 +64,9 @@ export class DashboardComponent implements OnInit {
 
   localStorage.setItem('smartlink_data', JSON.stringify(data));
 
-  this.linkGenerado = window.location.origin + '/' + slug;
+  // Codifica los datos en la URL como base64
+  const encoded = btoa(encodeURIComponent(JSON.stringify(data)));
+  this.linkGenerado = window.location.origin + '/' + slug + '?d=' + encoded;
 
   alert('Guardado correctamente');
 }

@@ -5,13 +5,13 @@ import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   { path: 'login', loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule) },
-  { 
-    path: 'admin', 
+  {
+    path: 'admin',
     loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule),
-    canActivate: [AuthGuard]   // 
+    canActivate: [AuthGuard]
   },
-  { path: ':artist', loadChildren: () => import('./features/smartlink/smartlink.module').then(m => m.SmartlinkModule) },
-  { path: '', redirectTo: 'artist', pathMatch: 'full' }
+  { path: 'smartlink', loadChildren: () => import('./features/smartlink/smartlink.module').then(m => m.SmartlinkModule) },
+  { path: '', redirectTo: 'smartlink', pathMatch: 'full' }
 ];
 
 @NgModule({

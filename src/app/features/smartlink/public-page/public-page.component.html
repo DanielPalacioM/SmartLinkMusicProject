@@ -35,19 +35,19 @@
 
         <div class="buttons">
 
-          <div *ngIf="urls.spotify" class="btn spotify" (click)="abrir(urls.spotify)">
+          <div *ngIf="urls.spotify" class="btn spotify" (click)="abrir(urls.spotify, 'spotify')">
             <img src="assets/spotify.png" class="icon"> Spotify
           </div>
 
-          <div *ngIf="urls.youtube" class="btn youtube" (click)="abrir(urls.youtube)">
+          <div *ngIf="urls.youtube" class="btn youtube" (click)="abrir(urls.youtube, 'youtube')">
             <img src="assets/youtubeRed.png" class="icon"> YouTube
           </div>
 
-          <div *ngIf="urls.facebook" class="btn facebook" (click)="abrir(urls.facebook)">
+          <div *ngIf="urls.facebook" class="btn facebook" (click)="abrir(urls.facebook, 'facebook')">
             <img src="assets/facebookBlue.png" class="icon"> Facebook
           </div>
 
-          <div *ngIf="urls.youtubemusic" class="btn ytmusic" (click)="abrir(urls.youtubemusic)">
+          <div *ngIf="urls.youtubemusic" class="btn ytmusic" (click)="abrir(urls.youtubemusic, 'youtube_music')">
             <img src="assets/ytmusic.png" class="icon"> YouTube Music
           </div>
 

@@ -115,14 +115,4 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  abrirSmartlink() {
-  const slug = this.title
-    .toLowerCase()
-    .trim()
-    .replace(/ /g, '-')
-    .replace(/[^\w-]+/g, '');
-  window.open(window.location.origin + '/' + slug, '_blank');
-}
-
-
 }

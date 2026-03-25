@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SupabaseService } from 'src/app/services/supabase.service';
+import { SupabaseService, LandingConfig } from 'src/app/services/supabase.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,12 +9,14 @@ import { SupabaseService } from 'src/app/services/supabase.service';
 })
 export class DashboardComponent implements OnInit {
 
-  seccion: string = '';
-  artist: string = '';
-  song: string = '';
-  previewImage: any = '';
-  linkGenerado: string = '';
+  seccion: string = 'info';
+  configId: string = '';
+  guardando: boolean = false;
 
+  // Campos info
+  title: string = '';
+
+  // URLs
   urls = {
     spotify: '',
     youtube: '',
@@ -22,7 +24,26 @@ export class DashboardComponent implements OnInit {
     facebook: ''
   };
 
+  // Portada
+  previewImage: string = '';
+  selectedFile: File | null = null;
+
   constructor(private supabaseService: SupabaseService) {}
+
+  async ngOnInit() {
+    try {
+      const config: LandingConfig = await this.supabaseService.getConfig();
+      this.configId = config.id;
+      this.title = config.title || '';
+      this.previewImage = config.cover_image_url || 'assets/default-cover.jpg';
+      this.urls.spotify = config.spotify_url || '';
+      this.urls.youtube = config.youtube_url || '';
+      this.urls.youtubemusic = config.youtube_music_url || '';
+      this.urls.facebook = config.facebook_url || '';
+    } catch (e) {
+      console.error('Error cargando config:', e);
+    }
+  }
 
   mostrarSeccion(sec: string) {
     this.seccion = sec;
@@ -30,62 +51,67 @@ export class DashboardComponent implements OnInit {
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = e => {
-        this.previewImage = reader.result;
-      };
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+
+    this.selectedFile = file;
+
+    // Preview local inmediato
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.previewImage = reader.result as string;
+    };
+    reader.readAsDataURL(file);
   }
 
   async guardar() {
-    const slug = this.artist
-      .toLowerCase()
-      .trim()
-      .replace(/ /g, '-')
-      .replace(/[^\w-]+/g, '');
-
-    const data = {
-      artist: this.artist,
-      song: this.song,
-      cover: this.previewImage,
-      urls: this.urls,
-      slug: slug
-    };
-
-    // Guarda en Supabase
-    const { error } = await this.supabaseService.guardarSmartlink(data);
-
-    if (error) {
-      alert('Error al guardar: ' + error.message);
+    if (!this.configId) {
+      alert('No se encontró configuración en la base de datos.');
       return;
     }
 
-    // Guarda también en localStorage como caché
-    localStorage.setItem('smartlink_data', JSON.stringify(data));
+    this.guardando = true;
 
-    this.linkGenerado = window.location.origin + '/' + slug;
+    try {
+      if (this.seccion === 'info') {
+        await this.supabaseService.updateConfig(this.configId, {
+          title: this.title
+        });
+        alert('Título guardado correctamente ✓');
+      }
 
-    alert('Guardado correctamente');
-  }
+      if (this.seccion === 'urls') {
+        await this.supabaseService.updateConfig(this.configId, {
+          spotify_url: this.urls.spotify,
+          youtube_url: this.urls.youtube,
+          youtube_music_url: this.urls.youtubemusic,
+          facebook_url: this.urls.facebook
+        });
+        alert('URLs guardadas correctamente ✓');
+      }
 
-  abrirSmartlink() {
-    if (this.linkGenerado) {
-      window.open(this.linkGenerado, '_blank');
-    }
-  }
+      if (this.seccion === 'portada') {
+        if (!this.selectedFile) {
+          alert('Selecciona una imagen primero.');
+          this.guardando = false;
+          return;
+        }
 
-  async ngOnInit() {
-    // Intenta cargar desde localStorage primero (más rápido)
-    const cached = localStorage.getItem('smartlink_data');
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      this.artist = parsed.artist;
-      this.song = parsed.song;
-      this.previewImage = parsed.cover;
-      this.urls = parsed.urls;
-      this.linkGenerado = window.location.origin + '/' + parsed.slug;
+        const publicUrl = await this.supabaseService.uploadCover(this.selectedFile);
+
+        await this.supabaseService.updateConfig(this.configId, {
+          cover_image_url: publicUrl
+        });
+
+        this.previewImage = publicUrl;
+        this.selectedFile = null;
+        alert('Portada subida correctamente ✓');
+      }
+
+    } catch (e: any) {
+      console.error(e);
+      alert('Error al guardar: ' + e.message);
+    } finally {
+      this.guardando = false;
     }
   }
 }

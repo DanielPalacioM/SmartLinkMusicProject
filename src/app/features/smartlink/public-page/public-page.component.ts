@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { SupabaseService } from 'src/app/services/supabase.service';
+import { SupabaseService, LandingConfig } from 'src/app/services/supabase.service';
 
 @Component({
   selector: 'app-public-page',
@@ -10,56 +9,45 @@ import { SupabaseService } from 'src/app/services/supabase.service';
 })
 export class PublicPageComponent implements OnInit {
 
-  artist = '';
-  song = '';
+  title = '';
   cover = '';
-  urls: any = {};
+  urls = {
+    spotify: '',
+    youtube: '',
+    facebook: '',
+    youtubemusic: ''
+  };
   sidebarOpen = false;
   noData = false;
+  cargando = true;
 
-  constructor(
-    private route: ActivatedRoute,
-    private supabaseService: SupabaseService
-  ) {}
+  constructor(private supabaseService: SupabaseService) {}
 
   async ngOnInit() {
-    const slug = this.route.snapshot.paramMap.get('artist');
+    try {
+      const config: LandingConfig = await this.supabaseService.getConfig();
 
-    if (!slug) {
-      this.noData = true;
-      return;
-    }
-
-    // Primero busca en Supabase (fuente de verdad)
-    const { data, error } = await this.supabaseService.obtenerSmartlink(slug);
-
-    if (data && !error) {
-      this.artist = data.artist;
-      this.song = data.song;
-      this.cover = data.cover;
-      this.urls = data.urls;
-      // Actualiza caché local
-      localStorage.setItem('smartlink_data', JSON.stringify(data));
-      return;
-    }
-
-    // Fallback: localStorage
-    const cached = localStorage.getItem('smartlink_data');
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      if (parsed.slug === slug) {
-        this.artist = parsed.artist;
-        this.song = parsed.song;
-        this.cover = parsed.cover;
-        this.urls = parsed.urls;
+      if (!config) {
+        this.noData = true;
         return;
       }
-    }
 
-    this.noData = true;
+      this.title         = config.title || '';
+      this.cover         = config.cover_image_url || '';
+      this.urls.spotify  = config.spotify_url || '';
+      this.urls.youtube  = config.youtube_url || '';
+      this.urls.facebook = config.facebook_url || '';
+      this.urls.youtubemusic = config.youtube_music_url || '';
+
+    } catch (e) {
+      console.error('Error cargando smartlink:', e);
+      this.noData = true;
+    } finally {
+      this.cargando = false;
+    }
   }
 
   abrir(url: string) {
-    window.open(url, '_blank');
+    if (url) window.open(url, '_blank');
   }
 }

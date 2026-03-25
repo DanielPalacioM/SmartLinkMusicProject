@@ -10,15 +10,15 @@ export class SupabaseService {
 
   constructor() {
     this.supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
-    auth: {
-      persistSession: true,
-      detectSessionInUrl: false,
-      storageKey: 'smartlink-auth',
-      autoRefreshToken: true,
-      lock: (_name: string, _acquireTimeout: number, fn: () => Promise<any>) => fn()
-    } as any
-  });
-}
+      auth: {
+        persistSession: true,
+        detectSessionInUrl: false,
+        storageKey: 'smartlink-auth',
+        autoRefreshToken: true,
+        lock: (_name: string, _acquireTimeout: number, fn: () => Promise<any>) => fn()
+      } as any
+    });
+  }
 
   async login(email: string, password: string) {
     return this.supabase.auth.signInWithPassword({ email, password });
@@ -32,17 +32,53 @@ export class SupabaseService {
     return this.supabase.auth.getSession();
   }
 
-  async guardarSmartlink(data: any) {
-    return this.supabase
-      .from('smartlinks')
-      .upsert(data, { onConflict: 'slug' });
+  // Sube imagen al bucket "covers" y devuelve la URL pública
+  async uploadCover(file: File): Promise<string> {
+    const fileName = 'cover.jpg';
+
+    const { error } = await this.supabase.storage
+      .from('covers')
+      .upload(fileName, file, { upsert: true });
+
+    if (error) throw error;
+
+    const { data } = this.supabase.storage
+      .from('covers')
+      .getPublicUrl(fileName);
+
+    // Fuerza recarga de imagen evitando caché del browser
+    return data.publicUrl + '?t=' + Date.now();
   }
 
-  async obtenerSmartlink(slug: string) {
-    return this.supabase
-      .from('smartlinks')
+  // Lee la fila única de landing_config
+  async getConfig() {
+    const { data, error } = await this.supabase
+      .from('landing_config')
       .select('*')
-      .eq('slug', slug)
       .single();
+
+    if (error) throw error;
+    return data;
   }
+
+  // Actualiza la fila por ID
+  async updateConfig(id: string, payload: Partial<LandingConfig>) {
+    const { error } = await this.supabase
+      .from('landing_config')
+      .update(payload)
+      .eq('id', id);
+
+    if (error) throw error;
+  }
+}
+
+export interface LandingConfig {
+  id: string;
+  title: string;
+  cover_image_url: string;
+  spotify_url: string;
+  youtube_url: string;
+  facebook_url: string;
+  youtube_music_url: string;
+  updated_at: string;
 }

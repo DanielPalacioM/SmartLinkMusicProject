@@ -1,21 +1,24 @@
-<div *ngIf="noData" style="color:white; text-align:center; padding:40px; font-size:18px;">
-  Smartlink no encontrado.
+<!-- CARGANDO -->
+<div *ngIf="cargando" class="loading-screen">
+  <div class="spinner"></div>
 </div>
 
-<div class="smartlink-container" *ngIf="!noData">
+<!-- NO DATA -->
+<div *ngIf="!cargando && noData" class="no-data">
+  Smartlink no disponible.
+</div>
+
+<!-- SMARTLINK -->
+<div class="smartlink-container" *ngIf="!cargando && !noData">
 
   <button class="hamburger" [class.active]="sidebarOpen" (click)="sidebarOpen = !sidebarOpen">
-    <span></span>
-    <span></span>
-    <span></span>
+    <span></span><span></span><span></span>
   </button>
 
-  <!-- SIDEBAR -->
   <div class="sidebar" [class.open]="sidebarOpen">
     <div class="sidebar-content">
       <button class="login-btn" routerLink="/login" (click)="sidebarOpen = false">
-        <span>👤</span>
-        Iniciar Sesión
+        <span>👤</span> Iniciar Sesión
       </button>
     </div>
   </div>
@@ -23,30 +26,31 @@
   <div class="bg-blur" [style.background-image]="'url(' + cover + ')'"></div>
 
   <div class="content">
-
     <div class="top-section">
-      <img [src]="cover || 'assets/default-cover.jpg'" class="cover">
+      <img [src]="cover || 'assets/default-cover.jpg'" class="cover" alt="Portada">
 
       <div class="info">
-        <h2 class="title">{{ artist }} - {{ song }}</h2>
+        <h2 class="title">{{ title || 'Artista - Canción' }}</h2>
         <p class="subtitle">Elige tu servicio de preferencia</p>
 
         <div class="buttons">
-          <div class="btn spotify" (click)="abrir(urls.spotify)">
+
+          <div *ngIf="urls.spotify" class="btn spotify" (click)="abrir(urls.spotify)">
             <img src="assets/spotify.png" class="icon"> Spotify
           </div>
 
-          <div class="btn youtube" (click)="abrir(urls.youtube)">
+          <div *ngIf="urls.youtube" class="btn youtube" (click)="abrir(urls.youtube)">
             <img src="assets/youtubeRed.png" class="icon"> YouTube
           </div>
 
-          <div class="btn facebook" (click)="abrir(urls.facebook)">
+          <div *ngIf="urls.facebook" class="btn facebook" (click)="abrir(urls.facebook)">
             <img src="assets/facebookBlue.png" class="icon"> Facebook
           </div>
 
-          <div class="btn ytmusic" (click)="abrir(urls.youtubemusic)">
+          <div *ngIf="urls.youtubemusic" class="btn ytmusic" (click)="abrir(urls.youtubemusic)">
             <img src="assets/ytmusic.png" class="icon"> YouTube Music
           </div>
+
         </div>
       </div>
     </div>
@@ -55,6 +59,6 @@
       Esta plataforma funciona como un Smart Link que redirige a servicios externos de música.
       No alojamos contenido musical.
     </p>
-
   </div>
+
 </div>

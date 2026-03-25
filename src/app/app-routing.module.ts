@@ -11,7 +11,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]   // 
   },
   { path: ':artist', loadChildren: () => import('./features/smartlink/smartlink.module').then(m => m.SmartlinkModule) },
-  { path: '', redirectTo: 'login', pathMatch: 'full' }
+  { path: '', redirectTo: 'artist', pathMatch: 'full' }
 ];
 
 @NgModule({
